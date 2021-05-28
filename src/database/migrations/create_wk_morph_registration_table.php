@@ -9,9 +9,9 @@ class CreateWkMorphRegistrationTable extends Migration
     public function up()
     {
         Schema::create(config('wk-core.table.morph-registration.registrations'), function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->morphs('morph');
-            $table->unsignedBigInteger('user_id');
+            $table->uuid('id');
+            $table->uuidMorphs('morph');
+            $table->uuid('user_id');
             $table->string('signup_note')->nullable();
             $table->string('signup_code')->nullable();
             $table->string('signup_rule_version')->nullable();
@@ -29,6 +29,7 @@ class CreateWkMorphRegistrationTable extends Migration
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
 
+            $table->primary('id');
             $table->index('signup_code');
             $table->index('state');
             $table->index('rule_version');

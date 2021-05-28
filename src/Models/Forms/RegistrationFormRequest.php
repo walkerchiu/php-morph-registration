@@ -17,7 +17,7 @@ class RegistrationFormRequest extends FormRequest
         $request = Request::instance();
         $data = $this->all();
         if ($request->isMethod('put') && empty($data['id']) && isset($request->id)) {
-            $data['id'] = (int) $request->id;
+            $data['id'] = (string) $request->id;
             $this->getInputSource()->replace($data);
         }
 
@@ -50,8 +50,8 @@ class RegistrationFormRequest extends FormRequest
     {
         $rules = [
             'morph_type'            => 'required_with:morph_id|string',
-            'morph_id'              => 'required_with:morph_type|integer|min:1',
-            'user_id'               => ['required','integer','min:1','exists:'.config('wk-core.table.user').',id'],
+            'morph_id'              => 'required_with:morph_type|string',
+            'user_id'               => ['required','string','exists:'.config('wk-core.table.user').',id'],
             'signup_note'           => 'nullable|string',
             'signup_code'           => '',
             'signup_rule_version'   => '',
@@ -64,7 +64,7 @@ class RegistrationFormRequest extends FormRequest
 
         $request = Request::instance();
         if ($request->isMethod('put') && isset($request->id)) {
-            $rules = array_merge($rules, ['id' => ['required','integer','min:1','exists:'.config('wk-core.table.morph-registration.registrations').',id']]);
+            $rules = array_merge($rules, ['id' => ['required','string','exists:'.config('wk-core.table.morph-registration.registrations').',id']]);
         }
 
         return $rules;
@@ -79,17 +79,14 @@ class RegistrationFormRequest extends FormRequest
     {
         return [
             'id.required'              => trans('php-core::validation.required'),
-            'id.integer'               => trans('php-core::validation.integer'),
-            'id.min'                   => trans('php-core::validation.min'),
+            'id.string'                => trans('php-core::validation.string'),
             'id.exists'                => trans('php-core::validation.exists'),
             'morph_type.required_with' => trans('php-core::validation.required_with'),
             'morph_type.string'        => trans('php-core::validation.string'),
             'morph_id.required_with'   => trans('php-core::validation.required_with'),
-            'morph_id.integer'         => trans('php-core::validation.integer'),
-            'morph_id.min'             => trans('php-core::validation.min'),
+            'morph_id.string'          => trans('php-core::validation.string'),
             'user_id.required'         => trans('php-core::validation.required'),
-            'user_id.integer'          => trans('php-core::validation.integer'),
-            'user_id.min'              => trans('php-core::validation.min'),
+            'user_id.string'           => trans('php-core::validation.string'),
             'user_id.exists'           => trans('php-core::validation.exists'),
             'signup_note.string'       => trans('php-core::validation.string'),
             'state.required'           => trans('php-core::validation.required'),

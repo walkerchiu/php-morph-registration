@@ -2,11 +2,11 @@
 
 namespace WalkerChiu\MorphRegistration\Models\Entities;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use WalkerChiu\Core\Models\Entities\DateTrait;
+use WalkerChiu\Core\Models\Entities\UuidModel;
 
-class Registration extends Model
+class Registration extends UuidModel
 {
     use DateTrait;
     use SoftDeletes;
