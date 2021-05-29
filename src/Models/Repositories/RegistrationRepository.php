@@ -21,12 +21,13 @@ class RegistrationRepository extends Repository
     }
 
     /**
-     * @param Array $data
-     * @param Int   $page
-     * @param Int   $nums per page
-     * @return Array
+     * @param Array   $data
+     * @param Int     $page
+     * @param Int     $nums per page
+     * @param Boolean $toArray
+     * @return Array|Collection
      */
-    public function list(Array $data, $page = null, $nums = null)
+    public function list(Array $data, $page = null, $nums = null, $toArray = true)
     {
         $this->assertForPagination($page, $nums);
 
@@ -76,13 +77,17 @@ class RegistrationRepository extends Repository
                             ->when(is_integer($page) && is_integer($nums), function ($query) use ($page, $nums) {
                                 return $query->forPage($page, $nums);
                             });
-        $list = [];
-        foreach ($records as $record) {
-            $data = $record->toArray();
-            array_push($list, $data);
-        }
+        if ($toArray) {
+            $list = [];
+            foreach ($records as $record) {
+                $data = $record->toArray();
+                array_push($list, $data);
+            }
 
-        return $list;
+            return $list;
+        } else {
+            return $records;
+        }
     }
 
     /**
